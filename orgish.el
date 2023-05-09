@@ -40,7 +40,10 @@
   (if (file-exists-p filename)
     (if (not (ignore-errors (orgish/extract-source filename (current-buffer))))
         ; some errors in parsing
-        (error "Source file does not seem to be orgish. Refusing to continue!")))
+        (progn
+          (kill-buffer)
+          (throw 'invalid-orgish-file "Source file does not seem to be orgish. Refusing to continue!"))
+      ))
   ; do the normal processing here
   (org-mode)
   (setq org-export-show-temporary-export-buffer nil)
