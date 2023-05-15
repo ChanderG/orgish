@@ -32,7 +32,7 @@
   t)
 
 (defun orgish/open (filename)
-  (interactive)
+  (interactive "FEnter file name: ")
   ; open this file - which shouldn't exist in the first place
   ; so a new fresh buffer should be created
   (find-file-literally (concat "*" filename "-orgish" "*"))
@@ -52,3 +52,13 @@
   ; autosave on focus out
   (add-hook 'focus-out-hook 'save-buffer 0 t)
   (add-hook 'write-contents-functions (apply-partially 'orgish/save-buffer (buffer-name) filename)))
+
+(defun orgish/check ()
+  "Check if the current file is orgish and upgrade the view to orgish."
+  (if (equal (buffer-substring-no-properties 1 9) "<!-- org")
+      (let ((srcbuffer (buffer-name)))
+        (kill-buffer)
+        (orgish/open srcbuffer))
+  ))
+
+(add-hook 'html-mode-hook 'orgish/check)
