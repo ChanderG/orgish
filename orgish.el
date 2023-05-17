@@ -16,7 +16,7 @@
   )
 
 (defun orgish/extract-source (file buffer)
-  "Extract out the source org from the html file."
+  "Extract out the source org from the html file into the buffer."
   (with-temp-buffer
     (insert-file-contents-literally file)
     (search-forward "<!-- org\n")
@@ -32,10 +32,18 @@
   t)
 
 (defun orgish/open (filename)
+  "Single entry point to open/create a new orgish file."
   (interactive "FEnter file name: ")
-  ; open this file - which shouldn't exist in the first place
-  ; so a new fresh buffer should be created
-  (find-file-literally (concat "*" filename "-orgish" "*"))
+  (let* ((bufname (concat "*" (ff-basename filename) "-orgish" "*"))
+        (buf-already-exists (get-buffer bufname)))
+    (switch-to-buffer bufname)
+    (if (not buf-already-exists)
+        (orgish/setup filename))))
+
+(defun orgish/setup (filename)
+  "Setup the current buffer as orgish with filename as the backing file.
+
+   Should never be called directly. Should only be called by orgish/open."
   ; check if we are opening an existing orgish file
   (if (file-exists-p filename)
     (if (not (ignore-errors (orgish/extract-source filename (current-buffer))))
@@ -56,9 +64,9 @@
 (defun orgish/check ()
   "Check if the current file is orgish and upgrade the view to orgish."
   (if (equal (buffer-substring-no-properties 1 9) "<!-- org")
-      (let ((srcbuffer (buffer-name)))
+      (let ((srcfile (buffer-file-name)))
         (kill-buffer)
-        (orgish/open srcbuffer))
+        (orgish/open srcfile))
   ))
 
 (add-hook 'html-mode-hook 'orgish/check)
