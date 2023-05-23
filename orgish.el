@@ -24,6 +24,7 @@
            (end (progn
                   (search-forward "org -->\n")
                   (forward-line -1)
+                  (forward-char -1)
                   (point)))
            (sbuf (current-buffer)))
         (with-current-buffer buffer
