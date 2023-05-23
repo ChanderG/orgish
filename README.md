@@ -9,6 +9,8 @@ Ok, let me explain a bit. What if a single file is both an org file and its expo
 1. Open the file in emacs: it is in Org mode! Edit it and simply save it.
 2. Open the same file in the browser: it is an html file! It has the updates you just did.
 
+![demo of orgish](demo.gif)
+
 ## Why?
 
 I have a few static html pages on my website that are small, single-purpose and updated only rarely. Every single time I try to update these, I regret not having the source in org format.
