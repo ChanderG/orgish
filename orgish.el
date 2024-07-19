@@ -35,7 +35,7 @@
 (defun orgish/open (filename)
   "Single entry point to open/create a new orgish file."
   (interactive "FEnter file name: ")
-  (let* ((bufname (concat "*" (ff-basename filename) "-orgish" "*"))
+  (let* ((bufname (concat "*" (file-name-nondirectory filename) "-orgish" "*"))
         (buf-already-exists (get-buffer bufname)))
     (switch-to-buffer bufname)
     (if (not buf-already-exists)
